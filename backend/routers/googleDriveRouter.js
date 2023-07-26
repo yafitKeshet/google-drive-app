@@ -1,9 +1,9 @@
 const express = require("express");
-
-const { uploadFiles } = require("../controllers/googleDriveController");
+const {
+  uploadFiles,
+  getFiles,
+} = require("../controllers/googleDriveController");
 const multer = require("multer");
-
-const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: "uploads",
@@ -15,6 +15,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.route("/upload").post(upload.array("files"), uploadFiles);
+const router = express.Router();
+
+router.route("/").post(upload.array("files"), uploadFiles).get(getFiles);
 
 module.exports = router;

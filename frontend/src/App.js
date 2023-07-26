@@ -3,6 +3,19 @@ import "./App.css";
 
 function App() {
   const fileInputRef = useRef(null);
+  const handleGetFiles = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/google-drive/", {
+        method: "GET",
+      });
+
+      const responseJSON = await response.json();
+      console.log("uploaded", responseJSON.data.files);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleFileUpload = async () => {
     const files = fileInputRef.current.files;
 
@@ -13,16 +26,13 @@ function App() {
       }
 
       try {
-        const response = await fetch(
-          "http://localhost:5000/google-drive/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const response = await fetch("http://localhost:5000/google-drive/", {
+          method: "POST",
+          body: formData,
+        });
 
-        const data = await response.json();
-        console.log("uploaded", data.files);
+        const responseJSON = await response.json();
+        console.log("uploaded", responseJSON.data.files);
       } catch (err) {
         console.log("error");
       }
@@ -33,6 +43,8 @@ function App() {
       <h1>upload </h1>
       <input type="file" multiple ref={fileInputRef} />
       <button onClick={handleFileUpload}>up</button>
+
+      <button onClick={handleGetFiles}>get</button>
     </div>
   );
 }
