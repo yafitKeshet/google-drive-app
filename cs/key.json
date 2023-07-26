@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "third-camera-394014",
+  "private_key_id": "5b0721af1e928c85a6d37374566b0e4bbcf11c02",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDqvvQGrCQf71Ws\nKUCArnkUAOlYqw5z9ZB/574ZkIKs3N90QS8GdxKUa7lCl6AbUNkEZHMrW/2CIMey\nW7Xj9eg/iySOMnDQf0sZkxmER1bHhC6Xk68qXxXREKk7V7okMtjoBAw7MLqd9VQE\nv54JOs38O+TEzzTtYp9iYLICbL6SV6joDp0uapTrXrmQ4oSOSkDfH3X4QvgearTi\nHOQSTKKBWqGiKqsw/OQ3tOlQfz+A0J55a9jLycofW9mhdfFgE8NvAKBfOsMJoAim\nWQYxsdaImIRXzKgqiUbPJ+lVtAScZN7ExQkuiv53UVSKcjfVlC7HiuUTSuOL0p4J\nyxIA7fE/AgMBAAECggEADz87rCrf8v90sfvavi29T7cz1zgCqZwTq7mA7e0mdHup\nVRMEyGeeGjjMlCgzOules+8IUfklt2vrCWLBwJHQz3IsrvW7J4R7e48QrOuE4rme\ndk1Rc8mWqhK23NPFk3AgCYkPXrehopZA9xWXekow/3ouawZ59BWgFflppntEsRsg\naH69hEIH5c6jjgwJpKPpVEBAK+OrdOvejKNrnP1PjH/OXHN48R+OLCdwJ1/2MVMX\nEj2ldMF9TuXE9nrsdiCK5GxbqUXMAUzVYGcIbumvqLSMN8c/QigqZ6WxgIUdC3CM\ngWw3VxaHSZIonAUJsy76HNuoY0itSRNNaJZW0x7aNQKBgQD+83NCgbAQKN8J7749\n4XpOO25a0lTYB/mI8jYSuoCqjjW7qUO0wawbLHSsvCVdezCy+8tGZEUBN16KxB3u\nsRQSCax8kj5gBecF19ARaWi5r6B0tACuXVkoqJo9Mlrxae8tBHIOIyeBadxEmHC7\nZP1D7w15wzE2p9Ef/zoJcD8CDQKBgQDrtjhf0RxYhKRfwHBzWtBAFzFdxoC3CnLQ\nspDwpsiolO/QkJk5uGLsiEOqB0RAl/1XpUCzvwIhun0RHxWL9pVylk9grdkAX07u\nOXtz1qJKap9xVJmR4OaLURviNzGBMmZl3JhJ7Ku2cdXB4Na/xAq2SvUDBVFWU8oo\ndkTuVAuJewKBgQDZw8QNaIykIOTxrc+HN5KqQ+Usuj8yDw27RXeeY6MHC1UmJ5vn\nRw3kYAKAkGwx/slH9/5W78ppEYw1ZvJSMPp9tbmY5alVh3Ue7omQdcK36CVbyWxT\ngvRm4CxuXRaE4gEjKIrrPGfACFXWWYbg6Y/SeNu/x1O/5XOgqvY9nZyT+QKBgQCc\nA6ZYtV4fsNvjjMphb/B7G17PhP3ZKY9JV4fb4WjbPIlm8O6aZ9MCYEb5GYoxfuhu\nxLCIyJqunHL/jCWE2JeemqK7iRYiyvLBd0ahK6WLv/r81lQ3XDb8a5kbKBEaRLPG\nJDagZ4hYYAxuIVXC5A17Dy4Q68oka51ZHr8NSI/CVQKBgQDBwYyMtDAN8igr5vdQ\nTp8AI1cGQT1O//2uljvA+V3Xzel34RbJKd0IyCe8Czjm21/8nkNk3fCb8AEVTSOc\nw0m7OWoNvgFzhWCWJ5joGVcJ5vSqp+XVz5G+fcfw/wNJNTkeU9ZtRwEPfu4AplwJ\n68ywD8RwsFrynAwETfU4yprHfA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "testingaccount@third-camera-394014.iam.gserviceaccount.com",
+  "client_id": "108446813242805431993",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/testingaccount%40third-camera-394014.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
