@@ -15,10 +15,11 @@ exports.getFiles = async (req, res) => {
   try {
     const response = await drive.files.list({
       // pageSize: 10,
-      fields: "nextPageToken, files(id, name)",
+
+      q: "trashed=false",
+      fields: "nextPageToken, files",
     });
     console.log(response.data.files);
-
     res.status(200).json({
       status: "success",
       data: {
@@ -42,22 +43,13 @@ exports.uploadFiles = async (req, res) => {
         requestBody: {
           name: file.originalname,
           mimeType: file.mimeType,
-          parents: ["1afqJ8js4BMdZ4IlM73O7v_woPn_Sik4q"],
+          parents: ["1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"],
         },
         media: {
           body: fs.createReadStream(file.path),
         },
       });
-      fs.writeFile(
-        "../backend/uploads/files.txt",
-        response.data.id + ",",
-        { flag: "a+" },
-        (err) => {
-          if (err) {
-            throw new Error(err);
-          }
-        }
-      );
+
       uploadedFiles.push(response.data);
     }
 
