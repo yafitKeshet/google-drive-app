@@ -11,20 +11,16 @@ const drive = google.drive({
   auth,
 });
 
-exports.getFiles = async (req, res) => {
+exports.deleteFiles = async (req, res) => {
   try {
-    const response = await drive.files.list({
-      // pageSize: 10,
-
-      q: "trashed=false",
-      fields: "nextPageToken, files",
+    req.body.forEach(async (file) => {
+      await drive.files.delete({
+        fileId: file.id,
+      });
     });
-    console.log(response.data.files);
     res.status(200).json({
       status: "success",
-      data: {
-        files: response.data.files,
-      },
+      data: "files deleted",
     });
   } catch (err) {
     res.status(400).json({
@@ -33,6 +29,74 @@ exports.getFiles = async (req, res) => {
     });
   }
 };
+exports.getFiles = async (req, res) => {
+  try {
+    let response = await drive.files.list({
+      q: "trashed=false",
+      fields: "nextPageToken, files",
+    });
+    if (response.status === 200) {
+      res.status(200).json({
+        status: "success",
+        data: {
+          files: response.data.files,
+        },
+      });
+    } else {
+      throw new Error(response);
+    }
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
+// exports.getFile = async (req, res) => {
+//   console.log(
+//     "******************************************************",
+//     req.params
+//   );
+
+//   let fileId = req.params.id;
+//   // let dest = fs.createWriteStream("../frontend/public/downloads/aboutImg.jpg");
+//   // let dest = fs.createWriteStream("../frontend/downloads/aboutImg.jpg");
+//   let dest = fs.createWriteStream("./downloads/aboutImg.jpg");
+//   let progress = 0;
+
+//   drive.files
+//     .get({ fileId, alt: "media" }, { responseType: "stream" })
+//     .then((driveResponse) => {
+//       driveResponse.data
+//         .on("end", () => {
+//           console.log("\nDone downloading file.");
+//           // const file = `${__dirname}/../../frontend/public/downloads/aboutImg.jpg`; // file path from where node.js will send file to the requested user
+//           // const file = `${__dirname}/../../frontend/downloads/aboutImg.jpg`; // file path from where node.js will send file to the requested user
+//           const file = `${__dirname}/../downloads/aboutImg.jpg`; // file path from where node.js will send file to the requested user
+//           res.download("./aboutImg.jpg"); // Set disposition and send it.
+//         })
+//         .on("error", (err) => {
+//           console.error("Error downloading file.");
+//         })
+//         .on("data", (d) => {
+//           progress += d.length;
+//           if (process.stdout.isTTY) {
+//             process.stdout.clearLine();
+//             process.stdout.cursorTo(0);
+//             process.stdout.write(`Downloaded ${progress} bytes`);
+//           }
+//         })
+//         .pipe(dest);
+
+//       //   res.status(200).json({
+//       //     status: "success",
+//       //     data: {},
+//       //   });
+//     })
+
+//     .catch((err) => console.log(err));
+// };
 
 exports.uploadFiles = async (req, res) => {
   try {
@@ -65,4 +129,8 @@ exports.uploadFiles = async (req, res) => {
       message: err,
     });
   }
+};
+
+exports.downloadFile = async (req, res) => {
+  res.download("./downloads/aboutImg.jpg");
 };
