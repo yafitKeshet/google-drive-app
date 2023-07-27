@@ -20,20 +20,23 @@ import FileDownload from "js-file-download";
 
 const MainFolder = (props) => {
   const [openFile, setOpenFile] = useState({ open: false, path: "" });
-  // const handleGetFile = async (id) => {
-  //   try {
-  //     const response = await fetch("http://localhost:5000/google-drive/" + id, {
-  //       method: "GET",
-  //     });
+  const handleGetFile = async (id) => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/google-drive/file/" + id,
+        {
+          method: "GET",
+        }
+      );
 
-  //     console.log(response);
-  //     // const responseJSON = await response.json();
+      console.log(response);
+      // const responseJSON = await response.json();
 
-  //     // return responseJSON.data.files;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+      // return responseJSON.data.files;
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const getIcon = (type) => {
     switch (type) {
       case "JPEG":
@@ -68,15 +71,15 @@ const MainFolder = (props) => {
 
   const handleOpenItem = (id) => {
     console.log("opennnn");
-    // handleGetFile("1sr7B2XiK6-VRRDRtmBzp_8sdCBP58r7o");
+    handleGetFile("1sr7B2XiK6-VRRDRtmBzp_8sdCBP58r7o");
     // setOpenFile({ open: true, path: "./downloads/aboutImg.jpg" });
-    axios({
-      url: "http://localhost:5000/google-drive/download",
-      method: "GET",
-      responseType: "blob",
-    }).then((res) => {
-      FileDownload(res.data, "downloaded.jpg");
-    });
+    // axios({
+    //   url: "http://localhost:5000/google-drive/download",
+    //   method: "GET",
+    //   responseType: "blob",
+    // }).then((res) => {
+    //   FileDownload(res.data, "downloaded.jpg");
+    // });
   };
   return (
     <Card className="mainFolder">
