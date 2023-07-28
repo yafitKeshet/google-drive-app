@@ -27,7 +27,7 @@ const Folder = (props) => {
     // >
     //   <FolderIcon className="folderIcon" />
     // </Card>
-    <div>folder</div>
+    <div>{props.name}</div>
   );
 };
 

@@ -1,15 +1,12 @@
 import "./MainFolder.css";
 import React, { useState } from "react";
-import Folder from "./Folder";
-import File from "../file/File";
+// import Folder from "./Folder";
+// import File from "../file/File";
 import Card from "../UI/Card";
-import PhotoIcon from "@mui/icons-material/Photo";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
-import FolderIcon from "@mui/icons-material/Folder";
 import axios from "axios";
 import FileDownload from "js-file-download";
-
+// import PdfViewer from "../PdfViewer";
+import Item from "../item/item";
 /*        
         mainItems={mainItems}
         items={items}
@@ -20,36 +17,6 @@ import FileDownload from "js-file-download";
 
 const MainFolder = (props) => {
   const [openFile, setOpenFile] = useState({ open: false, path: "" });
-  const handleGetFile = async (id) => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/google-drive/file/" + id,
-        {
-          method: "GET",
-        }
-      );
-
-      console.log(response);
-      // const responseJSON = await response.json();
-
-      // return responseJSON.data.files;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const getIcon = (type) => {
-    switch (type) {
-      case "JPEG":
-      case ".png":
-      case ".jpg":
-        return <PhotoIcon />;
-      case ".pdf":
-        return <PictureAsPdfIcon />;
-      case ".rtf":
-      default:
-        return <DocumentScannerIcon />;
-    }
-  };
 
   const handleSelectItem = (e, id) => {
     switch (e.detail) {
@@ -69,22 +36,37 @@ const MainFolder = (props) => {
     // console.log(e.detail);
   };
 
-  const handleOpenItem = (id) => {
+  const handleOpenItem = async (id) => {
+    //download
+    let url =
+      "https://drive.google.com/uc?id=1GYmc2LoJw4kFgFpdmSiich0qS7qVbGgv&export=download";
+
+    // window.open(url);
     console.log("opennnn");
-    handleGetFile("1sr7B2XiK6-VRRDRtmBzp_8sdCBP58r7o");
+    try {
+      await fetch("http://localhost:5000/google-drive/watch", {
+        method: "GET",
+      });
+
+      // const responseJSON = await response.json();
+
+      // return responseJSON.data.files;
+    } catch (err) {
+      console.log("ERROR: GET folder/getFiles", err);
+      return {};
+    }
+
     // setOpenFile({ open: true, path: "./downloads/aboutImg.jpg" });
     // axios({
-    //   url: "http://localhost:5000/google-drive/download",
-    //   method: "GET",
-    //   responseType: "blob",
+    // url: "http://localhost:5000/google-drive/download",
+    // method: "GET",
+    // responseType: "blob",
     // }).then((res) => {
-    //   FileDownload(res.data, "downloaded.jpg");
+    // FileDownload(res.data, "downloaded.jpg");
     // });
   };
   return (
     <Card className="mainFolder">
-      {/* <img src="./downloads/aboutImg.jpg" alt="dfs" /> */}
-      {openFile.open && <img src={openFile.path} alt="dfs" />}
       {props.items.map((item) => (
         <Card
           className="mainFolder-item"
@@ -93,24 +75,16 @@ const MainFolder = (props) => {
           onClick={(e) => handleSelectItem(e, item.id)}
           ondblclick={handleOpenItem}
         >
-          {item["mimeType"].includes("folder") ? (
-            <Folder
-            // onSelect={handleSelectItem}
-            // key={item.id}
-            // id={item.id}
-            // items={props.items}
-            // setMainItems={props.setMainItems}
-            // setItems={props.setItems}
-            // filterItems={props.filterItems}
-            />
-          ) : (
-            <File
-            // key={item.id}
-            // id={item.id}
-            // item={item}
-            // onSelect={handleSelectItem}
-            />
-          )}
+          <Item
+            name={item["name"].split(".")[0]}
+            type={
+              item["mimeType"].includes("folder")
+                ? "folder"
+                : item["name"].split[1]
+            }
+            owners={item.owners[0]["emailAddress"]}
+            size={Math.round(item.size / 1000)}
+          />
         </Card>
       ))}
     </Card>

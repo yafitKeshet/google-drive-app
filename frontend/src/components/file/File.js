@@ -40,7 +40,7 @@ const Folder = (props) => {
     //   <div> {props.item["name"]}</div>
     //   {/* <PhotoIcon /> */}
     // </Card>
-    <div>file</div>
+    <div>{props.name}</div>
   );
 };
 

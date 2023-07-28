@@ -1,9 +1,11 @@
 const express = require("express");
 const {
   uploadFiles,
-  getFiles,
+  getAllFiles,
   deleteFiles,
   getFile,
+  getFiles,
+  watch,
   downloadFile,
 } = require("../controllers/googleDriveController");
 const multer = require("multer");
@@ -26,9 +28,11 @@ router
   // .get(getFile)
   .delete(deleteFiles);
 
-router.route("/all-files").get(getFiles);
+router.route("/all-files").get(getAllFiles);
 // router.route("/:id").get(getFile);
 router.route("/download").get(downloadFile);
 router.route("/file/:id").get(getFile);
+router.route("/watch").get(watch);
 
+router.route("/folder/:id").get(getFiles);
 module.exports = router;
