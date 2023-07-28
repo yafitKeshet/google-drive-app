@@ -32,7 +32,7 @@ const Item = (props) => {
         return <DocumentScannerIcon className="itemIcon" />;
     }
   };
-  console.log(props.size);
+
   return (
     <Card>
       {getIcon()}
