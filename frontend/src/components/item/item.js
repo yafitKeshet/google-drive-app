@@ -6,39 +6,88 @@ import PhotoIcon from "@mui/icons-material/Photo";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import FolderIcon from "@mui/icons-material/Folder";
-
+import Menu from "../menu/Menu";
+import "./Item.css";
 /*        
-        mainItems={mainItems}
         items={items}
-        setMainItems={setMainItems}
         setItems={setItems}
-        filterItems={filterItems}
 */
 import Card from "../UI/Card";
 
 const Item = (props) => {
+  const onDelete = () => {
+    console.log("delete");
+  };
+  const onDownload = () => {
+    console.log("download");
+  };
+  const options = [
+    { data: "מחק", onClick: onDelete },
+    { data: "הורדה", onClick: onDownload },
+  ];
+
   const getIcon = () => {
     switch (props.type) {
       case "folder":
         return <FolderIcon className="itemIcon" />;
       case "JPEG":
-      case ".png":
-      case ".jpg":
+      case "png":
+      case "jpg":
         return <PhotoIcon className="itemIcon" />;
-      case ".pdf":
+      case "pdf":
         return <PictureAsPdfIcon className="itemIcon" />;
-      case ".rtf":
+      case "rtf":
       default:
         return <DocumentScannerIcon className="itemIcon" />;
     }
   };
 
+  const handleItemClicked = (e, id) => {
+    console.log(e.detail);
+
+    switch (e.detail) {
+      case 1:
+        console.log("click");
+        document.getElementById(id).classList.toggle("selected");
+
+        break;
+      case 2:
+        console.log("double click");
+      // handleOpenItem(id);
+      default:
+      case 3:
+        console.log("triple click");
+        break;
+    }
+    // console.log(e.detail);
+  };
+
   return (
-    <Card>
-      {getIcon()}
-      <div>{props.name}</div>
-      <div>{props.owners}</div>
-      <div>{`${props.size ? props.size + " KB" : "-"}`}</div>
+    <Card
+      className="item"
+      id={props.id}
+      onClick={(e) => handleItemClicked(e, props.id)}
+    >
+      <div className="two-col">
+        {getIcon()}
+        <div>{props.name}</div>
+      </div>
+      <div className="two-col">
+        <img src={props.owner_image} alt="תמונה של בעלי הקובץ" />
+        <span>{props.owner}</span>
+      </div>
+      <div className="two-col">
+        <span>
+          {props.modified_time[2] +
+            "/" +
+            props.modified_time[1] +
+            "/" +
+            props.modified_time[0]}
+        </span>
+        <span className="modified-by"> {props.modified_by}</span>
+      </div>
+      <span className="size">{`${props.size ? props.size + " KB" : "-"}`}</span>
+      <Menu options={options} />
     </Card>
   );
 };
