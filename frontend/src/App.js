@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./App.css";
 import MainFolder from "./components/folder/MainFolder";
-import { getFiles } from "./requests/googleDrive/folder.ts";
+import { getFiles } from "./requests/googleDrive.ts";
 
 const App = () => {
   const [items, setItems] = useState([]);

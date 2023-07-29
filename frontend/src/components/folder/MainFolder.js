@@ -18,24 +18,6 @@ import Item from "../item/Item";
 const MainFolder = (props) => {
   const [openFile, setOpenFile] = useState({ open: false, path: "" });
 
-  // const handleSelectItem = (e, id) => {
-  //   switch (e.detail) {
-  //     case 1:
-  //       console.log("click");
-  //       document.getElementById(id).classList.toggle("selected");
-
-  //       break;
-  //     case 2:
-  //       console.log("double click");
-  //       handleOpenItem(id);
-  //     default:
-  //     case 3:
-  //       console.log("triple click");
-  //       break;
-  //   }
-  //   // console.log(e.detail);
-  // };
-
   // const handleOpenItem = async (id) => {
   //   //download
   //   let url =
@@ -91,6 +73,8 @@ const MainFolder = (props) => {
             item.modifiedByMy ? "אני" : item.lastModifyingUser.displayName
           }
           size={Math.round(item.size / 1000)}
+          downloadUrl={item.webContentLink}
+          openUrl={item.webViewLink}
         />
         // </Card>
       ))}

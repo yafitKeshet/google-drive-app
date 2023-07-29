@@ -1,5 +1,3 @@
-// import "./Folder.css";
-
 import React, { useState } from "react";
 
 import PhotoIcon from "@mui/icons-material/Photo";
@@ -15,16 +13,24 @@ import "./Item.css";
 import Card from "../UI/Card";
 
 const Item = (props) => {
-  const onDelete = () => {
+  const onDelete = (url) => {
     console.log("delete");
   };
+  const onOpen = () => {
+    console.log("open");
+    window.open(props.openUrl);
+  };
   const onDownload = () => {
+    window.open(props.downloadUrl);
+
     console.log("download");
   };
   const options = [
+    { data: "צפייה", onClick: onOpen },
     { data: "מחק", onClick: onDelete },
-    { data: "הורדה", onClick: onDownload },
   ];
+  props.type !== "folder" &&
+    options.unshift({ data: "הורדה", onClick: onDownload });
 
   const getIcon = () => {
     switch (props.type) {
@@ -48,16 +54,13 @@ const Item = (props) => {
     switch (e.detail) {
       case 1:
         console.log("click");
-        document.getElementById(id).classList.toggle("selected");
+        // document.getElementById(id).classList.toggle("selected");
 
         break;
       case 2:
+      default:
         console.log("double click");
       // handleOpenItem(id);
-      default:
-      case 3:
-        console.log("triple click");
-        break;
     }
     // console.log(e.detail);
   };
@@ -66,7 +69,7 @@ const Item = (props) => {
     <Card
       className="item"
       id={props.id}
-      onClick={(e) => handleItemClicked(e, props.id)}
+      // onClick={(e) => handleItemClicked(e, props.id)}
     >
       <div className="two-col">
         {getIcon()}
