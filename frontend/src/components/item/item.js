@@ -5,6 +5,7 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import FolderIcon from "@mui/icons-material/Folder";
 import Menu from "../menu/Menu";
+import { deleteFile } from "../../requests/googleDrive.ts";
 import "./Item.css";
 /*        
         items={items}
@@ -13,22 +14,24 @@ import "./Item.css";
 import Card from "../UI/Card";
 
 const Item = (props) => {
-  const onDelete = (url) => {
-    console.log("delete");
+  const onDelete = async () => {
+    let deleted = await deleteFile(props.id);
+    if (deleted) props.onDelete();
+    else {
+      alert("משהו השתבש במחיקת הקובץ, אנא נסה שנית.");
+    }
   };
+
   const onOpen = () => {
-    console.log("open");
     window.open(props.openUrl);
   };
   const onDownload = () => {
+    if (props.type === "folder") {
+    }
     window.open(props.downloadUrl);
-
-    console.log("download");
   };
-  const options = [
-    { data: "צפייה", onClick: onOpen },
-    { data: "מחק", onClick: onDelete },
-  ];
+  const options = [{ data: "צפייה", onClick: onOpen }];
+  props.ownedByMe && options.push({ data: "מחק", onClick: onDelete });
   props.type !== "folder" &&
     options.unshift({ data: "הורדה", onClick: onDownload });
 
@@ -48,22 +51,22 @@ const Item = (props) => {
     }
   };
 
-  const handleItemClicked = (e, id) => {
-    console.log(e.detail);
+  // const handleItemClicked = (e, id) => {
+  //   console.log(e.detail);
 
-    switch (e.detail) {
-      case 1:
-        console.log("click");
-        // document.getElementById(id).classList.toggle("selected");
+  //   switch (e.detail) {
+  //     case 1:
+  //       console.log("click");
+  //       // document.getElementById(id).classList.toggle("selected");
 
-        break;
-      case 2:
-      default:
-        console.log("double click");
-      // handleOpenItem(id);
-    }
-    // console.log(e.detail);
-  };
+  //       break;
+  //     case 2:
+  //     default:
+  //       console.log("double click");
+  //     // handleOpenItem(id);
+  //   }
+  //   // console.log(e.detail);
+  // };
 
   return (
     <Card

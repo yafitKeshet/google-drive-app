@@ -29,6 +29,26 @@ exports.deleteFiles = async (req, res) => {
     });
   }
 };
+
+exports.deleteFile = async (req, res) => {
+  let fileId = req.params.id;
+  try {
+    let response = await drive.files.delete({
+      fileId: fileId,
+    });
+
+    console.log(response);
+    res.status(200).json({
+      status: "success",
+      data: "files deleted",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
 exports.getAllFiles = async (req, res) => {
   try {
     let response = await drive.files.list({
@@ -53,7 +73,6 @@ exports.getAllFiles = async (req, res) => {
   }
 };
 exports.getFiles = async (req, res) => {
-  console.log(req.params);
   let fileId = req.params.id;
 
   try {
@@ -61,16 +80,13 @@ exports.getFiles = async (req, res) => {
       q: `trashed=false and '${fileId}' in parents`,
       fields: "nextPageToken, files",
     });
-    if (response.status === 200) {
-      res.status(200).json({
-        status: "success",
-        data: {
-          files: response.data.files,
-        },
-      });
-    } else {
-      throw new Error(response);
-    }
+    console.log(response);
+    res.status(200).json({
+      status: "success",
+      data: {
+        files: response.data.files,
+      },
+    });
   } catch (err) {
     res.status(400).json({
       status: "fail",
@@ -158,6 +174,8 @@ exports.getFile = async (req, res) => {
 };
 
 exports.uploadFiles = async (req, res) => {
+  console.log(req.params.id);
+  console.log(req.files);
   try {
     const uploadedFiles = [];
     for (let i = 0; i < req.files.length; i++) {
@@ -166,6 +184,7 @@ exports.uploadFiles = async (req, res) => {
         requestBody: {
           name: file.originalname,
           mimeType: file.mimeType,
+          // parents: ["1x2H8eONOOP7pjZkQpPVuF2eyu75clV0e"],
           parents: ["1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"],
         },
         media: {
@@ -190,16 +209,46 @@ exports.uploadFiles = async (req, res) => {
   }
 };
 
-exports.downloadFile = async (req, res) => {
-  res.download("./downloads/aboutImg.jpg");
+exports.createFolder = async (req, res) => {
+  console.log(req.params);
+  let folderName = req.params.folderName;
+  let parentId = req.params.parentId;
+
+  const fileMetadata = {
+    name: folderName,
+    parents: [parentId],
+    mimeType: "application/vnd.google-apps.folder",
+  };
+
+  try {
+    const file = await drive.files.create({
+      resource: fileMetadata,
+      fields: "id,parents",
+    });
+    res.status(200).json({
+      status: "success",
+      data: {
+        folderId: file.data.id,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
 
-exports.watch = async (req, res) => {
-  // auth.getClient()
-  const client = await auth.getClient();
-  const projectId = await auth.getProjectId();
-  const url =
-    "https://drive.google.com/file/d/1GYmc2LoJw4kFgFpdmSiich0qS7qVbGgv/view?usp=drivesdk";
-  const f = await client.request({ url });
-  console.log(f.data);
-};
+// exports.watch = async (req, res) => {
+//   // auth.getClient()
+//   const client = await auth.getClient();
+//   const projectId = await auth.getProjectId();
+//   const url =
+//     "https://drive.google.com/file/d/1GYmc2LoJw4kFgFpdmSiich0qS7qVbGgv/view?usp=drivesdk";
+//   const f = await client.request({ url });
+//   console.log(f.data);
+// };
+
+// exports.downloadFile = async (req, res) => {
+//   res.download("./downloads/aboutImg.jpg");
+// };

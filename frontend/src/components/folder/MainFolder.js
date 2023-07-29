@@ -7,76 +7,88 @@ import axios from "axios";
 import FileDownload from "js-file-download";
 // import PdfViewer from "../PdfViewer";
 import Item from "../item/Item";
-/*        
-        mainItems={mainItems}
-        items={items}
-        setMainItems={setMainItems}
-        setItems={setItems}
-        filterItems={filterItems}
-*/
+import { Button, Checkbox } from "@mui/material";
+import { getFiles } from "../../requests/googleDrive.ts";
 
 const MainFolder = (props) => {
-  const [openFile, setOpenFile] = useState({ open: false, path: "" });
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  // const handleOpenItem = async (id) => {
-  //   //download
-  //   let url =
-  //     "https://drive.google.com/uc?id=1GYmc2LoJw4kFgFpdmSiich0qS7qVbGgv&export=download";
+  const toggleSelectAllItems = () => {
+    setSelectedItems((prev) =>
+      prev.length === props.items.length
+        ? []
+        : props.items.map((item) => ({
+            id: item.id,
+            downloadUrl: item.webContentLink,
+            openUrl: item.webViewLink,
+          }))
+    );
+  };
 
-  //   // window.open(url);
-  //   console.log("opennnn");
-  //   try {
-  //     await fetch("http://localhost:5000/google-drive/watch", {
-  //       method: "GET",
-  //     });
+  const toggleSelectItem = ({ downloadUrl, openUrl, id }) => {
+    setSelectedItems((prev) => {
+      let find = false;
 
-  //     // const responseJSON = await response.json();
-
-  //     // return responseJSON.data.files;
-  //   } catch (err) {
-  //     console.log("ERROR: GET folder/getFiles", err);
-  //     return {};
-  //   }
-
-  // setOpenFile({ open: true, path: "./downloads/aboutImg.jpg" });
-  // axios({
-  // url: "http://localhost:5000/google-drive/download",
-  // method: "GET",
-  // responseType: "blob",
-  // }).then((res) => {
-  // FileDownload(res.data, "downloaded.jpg");
-  // });
-  // };
+      let selected = prev.filter((el) => {
+        if (el.id === id) find = true;
+        return el.id !== id;
+      });
+      if (!find) {
+        selected.unshift({
+          id: id,
+          downloadUrl: downloadUrl,
+          openUrl: openUrl,
+        });
+      }
+      return selected;
+    });
+  };
+  const onChange = async () => {
+    let items = await getFiles(props.id);
+    props.onChange(items);
+  };
   return (
     <Card className="mainFolder">
+      <Button onClick={toggleSelectAllItems}>בחר הכל</Button>
       {props.items.map((item) => (
-        // <Card
-        //   className="mainFolder-item"
-        //   key={item.id}
-        //   id={item.id}
-        //   onClick={(e) => handleSelectItem(e, item.id)}
-        //   ondblclick={handleOpenItem}
-        // >
-        <Item
-          key={item.id}
-          id={item.id}
-          name={item["name"].split(".")[0]}
-          type={
-            item["mimeType"].includes("folder")
-              ? "folder"
-              : item["name"].split(".")[1]
-          }
-          owner={item.ownedByMe ? "אני" : item.owners[0]["displayName"]}
-          owner_image={item.owners[0]["photoLink"]}
-          modified_time={item.modifiedTime.slice(0, 10).split("-")}
-          modified_by={
-            item.modifiedByMy ? "אני" : item.lastModifyingUser.displayName
-          }
-          size={Math.round(item.size / 1000)}
-          downloadUrl={item.webContentLink}
-          openUrl={item.webViewLink}
-        />
-        // </Card>
+        <div key={item.id}>
+          <Checkbox
+            onChange={() =>
+              toggleSelectItem({
+                id: item.id,
+                downloadUrl: item.webContentLink,
+                openUrl: item.webViewLink,
+              })
+            }
+            checked={
+              selectedItems.find((el) => el.id === item.id) === undefined
+                ? false
+                : true
+            }
+          />
+          <Item
+            key={item.id}
+            id={item.id}
+            parent={props.id}
+            name={item["name"].split(".")[0]}
+            type={
+              item["mimeType"].includes("folder")
+                ? "folder"
+                : item["name"].split(".")[1]
+            }
+            owner={item.ownedByMe ? "אני" : item.owners[0]["displayName"]}
+            owner_image={item.owners[0]["photoLink"]}
+            modified_time={item.modifiedTime.slice(0, 10).split("-")}
+            modified_by={
+              item.modifiedByMy ? "אני" : item.lastModifyingUser.displayName
+            }
+            size={Math.round(item.size / 1000)}
+            downloadUrl={item.webContentLink}
+            openUrl={item.webViewLink}
+            onDelete={onChange}
+            ownedByMe={item.ownedByMe}
+          />
+        </div>
       ))}
     </Card>
   );
