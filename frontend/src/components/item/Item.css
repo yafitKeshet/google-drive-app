@@ -5,6 +5,7 @@
   align-items: center;
   gap: 2%; /* total: 8% */
   padding: 0 2%; /* total: 4% */
+  width: 100%;
 }
 .item.selected {
   background-color: rgb(133, 194, 229);

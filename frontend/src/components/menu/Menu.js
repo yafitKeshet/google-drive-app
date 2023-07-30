@@ -23,7 +23,7 @@ const Menu = (props) => {
   return (
     <Box>
       <Button onClick={openMenu} color="primary" variant="contained">
-        ...
+        {props.text}{" "}
       </Button>
       <MenuL
         open={Boolean(anchor)}

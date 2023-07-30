@@ -26,9 +26,9 @@ const Item = (props) => {
     window.open(props.openUrl);
   };
   const onDownload = () => {
-    if (props.type === "folder") {
+    if (props.downloadUrl) {
+      window.open(props.downloadUrl);
     }
-    window.open(props.downloadUrl);
   };
   const options = [{ data: "צפייה", onClick: onOpen }];
   props.ownedByMe && options.push({ data: "מחק", onClick: onDelete });
@@ -93,7 +93,7 @@ const Item = (props) => {
         <span className="modified-by"> {props.modified_by}</span>
       </div>
       <span className="size">{`${props.size ? props.size + " KB" : "-"}`}</span>
-      <Menu options={options} />
+      <Menu options={options} text="..." />
     </Card>
   );
 };

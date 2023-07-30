@@ -1,4 +1,57 @@
-.mainFolder-item.selected {
+.main-folder {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+.main-folder-card {
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 80%;
+}
+
+/* USER OPTIONS */
+.main-folder .user-options {
+  display: flex;
+  gap: 0.5rem;
+  /* justify-content: center; */
+  padding: 0 2%;
+  align-items: center;
+}
+
+.main-folder .delete.hide,
+.main-folder .download.hide,
+.main-folder .open.hide {
+  display: none;
+}
+
+.user-action {
+  position: relative;
+}
+.main-folder .user-action.open:hover + .open.hide,
+.main-folder .user-action.delete:hover + .delete.hide,
+.main-folder .user-action.download:hover + .download.hide {
+  display: block;
+  position: absolute;
+  padding: 0.5rem 1rem;
+  white-space: pre;
+  overflow: hidden;
+}
+
+/* ITEMS */
+.main-folder .items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.main-folder-item {
+  display: flex;
+  width: 100%;
+}
+
+/* .mainFolder-item.selected {
   background-color: rgb(133, 194, 229);
   opacity: 50%;
-}
+} */
