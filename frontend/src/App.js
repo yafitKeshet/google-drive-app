@@ -4,52 +4,56 @@ import MainFolder from "./components/folder/MainFolder";
 import { getFiles, createFolder, uploadFiles } from "./requests/googleDrive.ts";
 
 const App = () => {
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    const getItems = async () => {
-      let items = await getFiles("1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86");
-      // let items = await getFiles("0ACv2SIJxyS31Uk9PVA");
-      // let items = await getFiles("1qbX9zyiCwK-9BEzfXkuFhtAXdKDDH0Ka");
-      setItems(items);
+  // useEffect(() => {
+  //   const getItems = async () => {
+  //     let items = await getFiles("1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86");
+  //     // let items = await getFiles("0ACv2SIJxyS31Uk9PVA");
+  //     // let items = await getFiles("1qbX9zyiCwK-9BEzfXkuFhtAXdKDDH0Ka");
+  //     if (items === undefined) {
+  //       alert("משהו השתבש אנא נסית שנית.");
+  //     } else {
+  //       setItems(items);
+  //     }
 
-      console.log("Items:", items);
-    };
-    getItems();
-  }, []);
+  //     console.log("Items:", items);
+  //   };
+  //   getItems();
+  // }, []);
 
   const fileInputRef = useRef(null);
-  const inputRef = useRef(null);
+  // const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
 
-  const handleFileUpload = async () => {
-    const files = inputRef.current.files;
-    // const files = fileInputRef.current.files;
+  // const handleFileUpload = async () => {
+  //   const files = inputRef.current.files;
+  // const files = fileInputRef.current.files;
 
-    console.log("app", files);
-    // if (files.length > 0) {
-    //   const formData = new FormData();
-    //   for (let i = 0; i < files.length; i++) {
-    //     formData.append("files", files[i]);
-    //   }
+  console.log("app", files);
+  // if (files.length > 0) {
+  //   const formData = new FormData();
+  //   for (let i = 0; i < files.length; i++) {
+  //     formData.append("files", files[i]);
+  //   }
 
-    //   try {
-    //     const response = await fetch("http://localhost:5000/google-drive/", {
-    //       method: "POST",
-    //       body: formData,
-    //     });
+  //   try {
+  //     const response = await fetch("http://localhost:5000/google-drive/", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
 
-    //     const responseJSON = await response.json();
-    //     console.log("uploaded", responseJSON.data.files);
-    //   } catch (err) {
-    //     console.log("error");
-    //   }
-    // }
-  };
+  //     const responseJSON = await response.json();
+  //     console.log("uploaded", responseJSON.data.files);
+  //   } catch (err) {
+  //     console.log("error");
+  //   }
+  // }
+  // };
 
   return (
     <div className="App">
-      <input
+      {/* <input
         ref={inputRef}
         type="file"
         webkitdirectory="true"
@@ -85,11 +89,12 @@ const App = () => {
         onClick={() => {
           createFolder("haha", "1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86");
         }}
-      />
+      /> */}
       <MainFolder
-        id={"1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"}
-        items={items}
-        onChange={setItems}
+        id="1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"
+        // items={items}
+        // onChange={setItems}
+        // onChange={() => {}}
       />
     </div>
   );

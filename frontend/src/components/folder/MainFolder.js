@@ -1,29 +1,66 @@
 import "./MainFolder.css";
-import React, { useState } from "react";
-// import Folder from "./Folder";
-// import File from "../file/File";
+import React, { useState, useEffect } from "react";
 import Card from "../UI/Card";
-import axios from "axios";
-import FileDownload from "js-file-download";
-// import PdfViewer from "../PdfViewer";
 import Item from "../item/Item";
-import { Button, Checkbox } from "@mui/material";
-import { getFiles } from "../../requests/googleDrive.ts";
+import { Button, Checkbox, Backdrop } from "@mui/material";
+import { getFiles, createFolder } from "../../requests/googleDrive.ts";
+import UploadFolder from "./UploadFolder";
+import Menu from "../menu/Menu";
 
 const MainFolder = (props) => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [items, setItems] = useState([]);
+  const [userOptions, setUserOptions] = useState({
+    createFolder: false,
+    uploadFolder: false,
+    uploadFile: false,
+  });
+
+  const toggleUserOptions = (option) => {
+    setUserOptions((prev) => {
+      return { ...prev, [option]: !prev[option] };
+    });
+  };
+
+  const getItems = async () => {
+    let items = await getFiles(props.id);
+    if (items === undefined) {
+      alert("משהו השתבש, אנא נסה שנית.");
+    } else {
+      setItems(items);
+    }
+  };
+
+  useEffect(() => {
+    const onStart = async () => {
+      await getItems();
+    };
+    onStart();
+  }, []);
 
   const toggleSelectAllItems = () => {
     setSelectedItems((prev) =>
-      prev.length === props.items.length
+      prev.length === items.length
         ? []
-        : props.items.map((item) => ({
+        : items.map((item) => ({
             id: item.id,
             downloadUrl: item.webContentLink,
             openUrl: item.webViewLink,
           }))
     );
   };
+  const createNewFolder = async () => {
+    await createFolder("new", props.id);
+    getItems();
+  };
+  const options = [
+    { data: "תיקייה חדשה", onClick: createNewFolder },
+    {
+      data: "העלאת תיקייה",
+      params: "uploadFolder",
+      onClick: toggleUserOptions,
+    },
+  ];
 
   const toggleSelectItem = ({ downloadUrl, openUrl, id }) => {
     setSelectedItems((prev) => {
@@ -43,14 +80,27 @@ const MainFolder = (props) => {
       return selected;
     });
   };
-  const onChange = async () => {
-    let items = await getFiles(props.id);
-    props.onChange(items);
-  };
+
   return (
     <Card className="mainFolder">
+      {userOptions.uploadFolder && (
+        <UploadFolder
+          folderId={props.id}
+          onCancel={() => {
+            toggleUserOptions("uploadFolder");
+          }}
+          onChange={getItems}
+        />
+      )}
+      {/* 
+
+      <Button onClick={toggleUploadItems} variant="contained">
+        העלאת קבצים
+      </Button> */}
+      <Menu options={options} />
+
       <Button onClick={toggleSelectAllItems}>בחר הכל</Button>
-      {props.items.map((item) => (
+      {items.map((item) => (
         <div key={item.id}>
           <Checkbox
             onChange={() =>
@@ -85,7 +135,7 @@ const MainFolder = (props) => {
             size={Math.round(item.size / 1000)}
             downloadUrl={item.webContentLink}
             openUrl={item.webViewLink}
-            onDelete={onChange}
+            onDelete={getItems}
             ownedByMe={item.ownedByMe}
           />
         </div>
@@ -95,3 +145,13 @@ const MainFolder = (props) => {
 };
 
 export default MainFolder;
+
+/*
+<Button onClick={handleOpen}>Show backdrop</Button>
+<Backdrop
+  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  open={open}
+  onClick={handleClose}
+>
+  <CircularProgress color="inherit" />
+</Backdrop> */

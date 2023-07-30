@@ -6,10 +6,10 @@ const Menu = (props) => {
 
   const [selected, setSelected] = useState(-1);
 
-  const onMenuItemClick = (event, index, onClick) => {
+  const onMenuItemClick = (event, index, onClick, params) => {
     setAnchor(null);
     setSelected(index);
-    onClick();
+    onClick(params);
   };
 
   const openMenu = (event) => {
@@ -41,7 +41,9 @@ const Menu = (props) => {
         {props.options.map((option, index) => (
           <MenuItem
             key={index}
-            onClick={(event) => onMenuItemClick(event, index, option.onClick)}
+            onClick={(event) =>
+              onMenuItemClick(event, index, option.onClick, option.params)
+            }
             selected={index === selected}
           >
             {option.data}

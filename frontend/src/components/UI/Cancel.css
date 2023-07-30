@@ -1,0 +1,8 @@
+.cancel-icon {
+  height: 15px;
+  width: 15px;
+}
+
+.cancel-icon:hover {
+  background-color: #e5e5e5;
+}

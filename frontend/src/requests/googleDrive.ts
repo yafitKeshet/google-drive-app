@@ -8,15 +8,14 @@ export const getFiles = async (folderId) => {
     );
     if (response.status === 200) {
       const responseJSON = await response.json();
-      // console.log("haha");
       return responseJSON.data.files;
     } else {
-      console.log("ERROR: GET folder/getFiles");
-      return [];
+      console.log(`ERROR: GET folder/folderId=${folderId}`);
+      return undefined;
     }
   } catch (err) {
-    console.log("ERROR: GET folder/getFiles", err);
-    return [];
+    console.log(`ERROR: GET folder/folderId=${folderId}`);
+    return undefined;
   }
 };
 
@@ -31,11 +30,11 @@ export const deleteFile = async (fileId) => {
     if (response.status === 200) {
       return true;
     } else {
-      console.log("ERROR: DELETE file");
+      console.log(`ERROR: DELETE file/fileId=${fileId}`);
       return false;
     }
   } catch (err) {
-    console.log("ERROR: DELETE file", err);
+    console.log(`ERROR: DELETE file/fileId=${fileId}`);
     return false;
   }
 };
@@ -49,27 +48,27 @@ export const createFolder = async (folderName, parentId) => {
         parentId,
       {
         method: "POST",
-        body: JSON.stringify({ name: "haha" }),
       }
     );
     if (response.status === 200) {
       const responseJSON = await response.json();
-      console.log(responseJSON);
 
       return responseJSON.data.folderId;
     } else {
-      console.log("ERROR: POST folder");
-      return false;
+      console.log(
+        `ERROR: POST folder/folderName=${folderName}/parentId=${parentId}`
+      );
+      return undefined;
     }
   } catch (err) {
-    console.log("ERROR: POST folder", err);
-    return false;
+    console.log(
+      `ERROR: POST folder/folderName=${folderName}/parentId=${parentId}`
+    );
+    return undefined;
   }
 };
 
 export const uploadFiles = async (files, folderId) => {
-  console.log("ts", files);
-  console.log("ts", folderId);
   if (files.length > 0) {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -84,11 +83,15 @@ export const uploadFiles = async (files, folderId) => {
           body: formData,
         }
       );
-
-      const responseJSON = await response.json();
-      console.log("uploaded", responseJSON.data.files);
+      if (response.status === 200) {
+        const responseJSON = await response.json();
+        return responseJSON.data.files;
+      } else {
+        console.log(`ERROR: POST folder/folderId=${folderId}`);
+        return undefined;
+      }
     } catch (err) {
-      console.log("error");
+      console.log(`ERROR: POST folder/folderId=${folderId}`);
     }
   }
 };
