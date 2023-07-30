@@ -67,8 +67,9 @@ export const createFolder = async (folderName, parentId) => {
   }
 };
 
-export const uploadFiles = async (files, parentId) => {
-  console.log(files);
+export const uploadFiles = async (files, folderId) => {
+  console.log("ts", files);
+  console.log("ts", folderId);
   if (files.length > 0) {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -77,7 +78,7 @@ export const uploadFiles = async (files, parentId) => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/google-drive/folder/" + parentId,
+        "http://localhost:5000/google-drive/folder/" + folderId,
         {
           method: "POST",
           body: formData,

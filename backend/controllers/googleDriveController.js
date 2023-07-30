@@ -174,8 +174,9 @@ exports.getFile = async (req, res) => {
 };
 
 exports.uploadFiles = async (req, res) => {
-  console.log(req.params.id);
-  console.log(req.files);
+  const parentId = req.params.id;
+  console.log("bb", parentId);
+  console.log("aa", req.files);
   try {
     const uploadedFiles = [];
     for (let i = 0; i < req.files.length; i++) {
@@ -184,8 +185,8 @@ exports.uploadFiles = async (req, res) => {
         requestBody: {
           name: file.originalname,
           mimeType: file.mimeType,
-          // parents: ["1x2H8eONOOP7pjZkQpPVuF2eyu75clV0e"],
-          parents: ["1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"],
+          parents: [parentId],
+          // parents: ["1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"],
         },
         media: {
           body: fs.createReadStream(file.path),

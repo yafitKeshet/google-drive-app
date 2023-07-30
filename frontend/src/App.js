@@ -26,24 +26,25 @@ const App = () => {
     const files = inputRef.current.files;
     // const files = fileInputRef.current.files;
 
-    if (files.length > 0) {
-      const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
-        formData.append("files", files[i]);
-      }
+    console.log("app", files);
+    // if (files.length > 0) {
+    //   const formData = new FormData();
+    //   for (let i = 0; i < files.length; i++) {
+    //     formData.append("files", files[i]);
+    //   }
 
-      try {
-        const response = await fetch("http://localhost:5000/google-drive/", {
-          method: "POST",
-          body: formData,
-        });
+    //   try {
+    //     const response = await fetch("http://localhost:5000/google-drive/", {
+    //       method: "POST",
+    //       body: formData,
+    //     });
 
-        const responseJSON = await response.json();
-        console.log("uploaded", responseJSON.data.files);
-      } catch (err) {
-        console.log("error");
-      }
-    }
+    //     const responseJSON = await response.json();
+    //     console.log("uploaded", responseJSON.data.files);
+    //   } catch (err) {
+    //     console.log("error");
+    //   }
+    // }
   };
 
   return (
@@ -53,6 +54,20 @@ const App = () => {
         type="file"
         webkitdirectory="true"
         onChange={async () => {
+          let folderName = inputRef.current.files[0].webkitRelativePath
+            .split("/")
+            .slice(0, -1)
+            .slice(-1)[0];
+          console.log("name:", folderName);
+          let folderId = await createFolder(
+            folderName,
+            "1RFTnZZ2YoiUJVqwDLUCE_XpOoyWKrT86"
+          );
+
+          console.log("pID: ", folderId);
+
+          // handleFileUpload();
+          uploadFiles(inputRef.current.files, folderId);
           // const files = Array.from(inputRef.current.files);
 
           // console.log(
@@ -61,7 +76,6 @@ const App = () => {
           //   "1_0DVqaCR8TZxndhDjx7X_9lZ7eG6gYDg"
           // );
           // );
-          handleFileUpload();
         }}
       />
 
