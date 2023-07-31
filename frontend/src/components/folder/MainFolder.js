@@ -1,7 +1,7 @@
 import "./MainFolder.css";
 import React, { useState, useEffect, useRef } from "react";
 import Card from "../UI/Card";
-import Item from "../item/Item";
+import Item from "../item/FolderItem";
 import { Button, Checkbox } from "@mui/material";
 import { getFiles, deleteFile } from "../../requests/googleDrive.ts";
 import UploadFolder from "../userOptions/UploadFolder";

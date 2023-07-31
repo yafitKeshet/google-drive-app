@@ -6,17 +6,11 @@ import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import FolderIcon from "@mui/icons-material/Folder";
 import Menu from "../menu/Menu";
 import { deleteFile } from "../../requests/googleDrive.ts";
-import "./Item.css";
+import "./FolderItem.css";
 
 import Card from "../UI/Card";
 
 const Item = (props) => {
-  /* SELECTED */
-  const [selected, setSelected] = useState(false);
-  const toggleSelected = () => {
-    setSelected((prev) => !prev);
-  };
-
   /* OPTIONS */
   const onDelete = async () => {
     props.onLoad();
@@ -71,7 +65,6 @@ const Item = (props) => {
           id: props.id,
           ownedByMe: props.ownedByMe,
         });
-        toggleSelected();
         break;
       case 2:
         if (props.type === "folder") props.onSelectFolder(id);
