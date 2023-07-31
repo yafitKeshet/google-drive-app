@@ -83,7 +83,7 @@ const Item = (props) => {
 
   return (
     <Card
-      className={`item ${selected && "selected"}`}
+      className={`item  ${props.className}`}
       id={props.id}
       onClick={(e) => handleItemClicked(e, props.id)}
     >

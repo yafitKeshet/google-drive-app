@@ -315,6 +315,11 @@ const MainFolder = (props) => {
               />
 
               <Item
+                className={
+                  selectedItems.find((el) => el.id === item.id) === undefined
+                    ? ""
+                    : "selected"
+                }
                 key={item.id}
                 id={item.id}
                 parent={props.id}
