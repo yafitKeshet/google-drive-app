@@ -127,6 +127,7 @@ const MainFolder = (props) => {
           ownedByMe: ownedByMe,
         });
       }
+      console.log(selected);
       return selected;
     });
   };
@@ -161,7 +162,7 @@ const MainFolder = (props) => {
         break;
       case "open":
         for (const el of selectedItems) {
-          if (el.downloadUrl) {
+          if (el.openUrl) {
             window.open(el.openUrl);
           }
         }
