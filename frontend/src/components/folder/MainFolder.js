@@ -157,6 +157,8 @@ const MainFolder = (props) => {
         for (const el of selectedItems) {
           if (el.downloadUrl) {
             window.open(el.downloadUrl);
+          } else {
+            alert("התיקיה לא ירדה, ניתן להוריד קבצים בלבד.");
           }
         }
         break;
