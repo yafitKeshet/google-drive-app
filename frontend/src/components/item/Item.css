@@ -1,6 +1,6 @@
 .item {
   display: grid;
-  grid-template-columns: 50% 15% 16% 5% 2%;
+  grid-template-columns: 45% 15% 21% 5% 2%;
   justify-items: right;
   align-items: center;
   gap: 2%; /* total: 8% */

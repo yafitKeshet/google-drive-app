@@ -51,28 +51,29 @@ const Item = (props) => {
     }
   };
 
-  // const handleItemClicked = (e, id) => {
-  //   console.log(e.detail);
+  const handleItemClicked = (e, id) => {
+    console.log(e.detail);
 
-  //   switch (e.detail) {
-  //     case 1:
-  //       console.log("click");
-  //       // document.getElementById(id).classList.toggle("selected");
+    switch (e.detail) {
+      case 1:
+        console.log("click");
+        // document.getElementById(id).classList.toggle("selected");
 
-  //       break;
-  //     case 2:
-  //     default:
-  //       console.log("double click");
-  //     // handleOpenItem(id);
-  //   }
-  //   // console.log(e.detail);
-  // };
+        break;
+      case 2:
+      default:
+        console.log("double click");
+        props.onSelectFolder(id);
+      // handleOpenItem(id);
+    }
+    // console.log(e.detail);
+  };
 
   return (
     <Card
       className="item"
       id={props.id}
-      // onClick={(e) => handleItemClicked(e, props.id)}
+      onClick={(e) => handleItemClicked(e, props.id)}
     >
       <div className="two-col">
         {getIcon()}

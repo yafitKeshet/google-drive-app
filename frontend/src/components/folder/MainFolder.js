@@ -2,7 +2,7 @@ import "./MainFolder.css";
 import React, { useState, useEffect } from "react";
 import Card from "../UI/Card";
 import Item from "../item/Item";
-import { Button, Checkbox, Backdrop } from "@mui/material";
+import { Button, Checkbox, Backdrop, Hidden } from "@mui/material";
 import { getFiles, deleteFile } from "../../requests/googleDrive.ts";
 import UploadFolder from "../userOptions/UploadFolder";
 import UploadFiles from "../userOptions/UploadFiles";
@@ -11,6 +11,7 @@ import Menu from "../menu/Menu";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import ForwardIcon from "@mui/icons-material/Forward";
 
 const MainFolder = (props) => {
   useEffect(() => {
@@ -18,7 +19,7 @@ const MainFolder = (props) => {
       await getItems();
     };
     onStart();
-  }, []);
+  }, [props.id]);
 
   /* ITEMS */
   const [items, setItems] = useState([]);
@@ -159,83 +160,114 @@ const MainFolder = (props) => {
     }
   };
 
+  /* CHANGE MAIN FOLDER */
+  const onChangeFolder = (folderId) => {
+    props.onChangeFolder({
+      item: { id: folderId, parentId: props.id },
+      action: "add",
+    });
+  };
+
+  const onBackFolder = () => {
+    props.onChangeFolder({});
+  };
+
   return (
     <div className="main-folder">
       <Card className="main-folder-card">
         {/* USER OPTIONS */}
-        <Card className="user-options">
-          {userOptions.uploadFolder && (
-            <UploadFolder
-              folderId={props.id}
-              onCancel={() => {
-                toggleUserOptions("uploadFolder");
-              }}
-              onChange={getItems}
-            />
-          )}
-          {userOptions.uploadFiles && (
-            <UploadFiles
-              folderId={props.id}
-              onCancel={() => toggleUserOptions("uploadFiles")}
-              onChange={getItems}
-            />
-          )}
-          {userOptions.createFolder && (
-            <CreateFolder
-              folderId={props.id}
-              onCancel={() => {
-                toggleUserOptions("createFolder");
-              }}
-              onChange={getItems}
-            />
-          )}
-          <Menu options={options} text="אפשרויות" />
+        <div className={`main-menu ${props.parentId ? "open" : "close"}`}>
+          {/* {props.parentId && ( */}
+          <div className="user-action">
+            <div className="user-action back">
+              <ForwardIcon
+                className="icon-btn"
+                color="primary"
+                onClick={onBackFolder}
+              />
+            </div>
+            <Card className="back hide">חזרה</Card>
+          </div>
+          {/* )} */}
+          <Card className="user-options">
+            {userOptions.uploadFolder && (
+              <UploadFolder
+                folderId={props.id}
+                onCancel={() => {
+                  toggleUserOptions("uploadFolder");
+                }}
+                onChange={getItems}
+              />
+            )}
+            {userOptions.uploadFiles && (
+              <UploadFiles
+                folderId={props.id}
+                onCancel={() => toggleUserOptions("uploadFiles")}
+                onChange={getItems}
+              />
+            )}
+            {userOptions.createFolder && (
+              <CreateFolder
+                folderId={props.id}
+                onCancel={() => {
+                  toggleUserOptions("createFolder");
+                }}
+                onChange={getItems}
+              />
+            )}
+            <Menu options={options} text="אפשרויות" />
 
-          {/* SELECT ITEMS */}
-          <Button onClick={toggleSelectAllItems}>בחר הכל</Button>
-          <Button onClick={toggleSelectAllOwnItems}>
-            בחר את כל הפריטים שלי
-          </Button>
-          <div className="user-action">
-            <div className="user-action delete">
-              <DeleteIcon
-                className="icon-btn"
-                color="primary"
-                onClick={() => {
-                  handleSelectedItem("delete");
-                }}
-              />
+            {/* SELECT ITEMS */}
+            <Button onClick={toggleSelectAllItems}>בחר הכל</Button>
+            <Button onClick={toggleSelectAllOwnItems}>
+              בחר את כל הפריטים שלי
+            </Button>
+            <div className="user-action">
+              <div className="user-action delete">
+                <DeleteIcon
+                  className="icon-btn"
+                  color="primary"
+                  onClick={() => {
+                    handleSelectedItem("delete");
+                  }}
+                />
+              </div>
+              <Card className="delete hide">מחיקה</Card>
             </div>
-            <Card className="delete hide">מחיקה</Card>
-          </div>
-          <div className="user-action">
-            <div className="user-action download">
-              <DownloadIcon
-                className="icon-btn"
-                color="primary"
-                onClick={() => {
-                  handleSelectedItem("download");
-                }}
-              />
+            <div className="user-action">
+              <div className="user-action download">
+                <DownloadIcon
+                  className="icon-btn"
+                  color="primary"
+                  onClick={() => {
+                    handleSelectedItem("download");
+                  }}
+                />
+              </div>
+              <Card className="download hide">הורדה</Card>
             </div>
-            <Card className="download hide">הורדה</Card>
-          </div>
-          <div className="user-action">
-            <div className="user-action open">
-              <OpenInNewIcon
-                className="icon-btn"
-                color="primary"
-                onClick={() => {
-                  handleSelectedItem("open");
-                }}
-              />
+            <div className="user-action">
+              <div className="user-action open">
+                <OpenInNewIcon
+                  className="icon-btn"
+                  color="primary"
+                  onClick={() => {
+                    handleSelectedItem("open");
+                  }}
+                />
+              </div>
+              <Card className="open hide">צפייה בחלון נפרד</Card>
             </div>
-            <Card className="open hide">צפייה בחלון נפרד</Card>
-          </div>
-        </Card>
-
+          </Card>
+        </div>
         {/* ITEMS */}
         <div className="items">
+          <Card className="items-menu">
+            <span>שם</span>
+            <span>בעלים</span>
+            <span>השינוי האחרון</span>
+            <span>גודל הקובץ</span>
+          </Card>
           {items.map((item) => (
             <div key={item.id} className="main-folder-item">
               <Checkbox
@@ -275,6 +307,7 @@ const MainFolder = (props) => {
                 openUrl={item.webViewLink}
                 onDelete={getItems}
                 ownedByMe={item.ownedByMe}
+                onSelectFolder={onChangeFolder}
               />
             </div>
           ))}
