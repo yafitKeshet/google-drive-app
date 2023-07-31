@@ -20,6 +20,7 @@ export const getFiles = async (folderId) => {
 };
 
 export const deleteFile = async (fileId) => {
+  console.log("delete:", fileId);
   try {
     const response = await fetch(
       "http://localhost:5000/google-drive/file/" + fileId,

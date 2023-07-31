@@ -11,11 +11,14 @@ const UploadFiles = (props) => {
   const inputRef = useRef(null);
 
   const onUpload = async () => {
+    props.onLoad();
+
     let response = await uploadFiles(inputRef.current.files, props.folderId);
     if (response === undefined) {
-      alert("Something went wrong, please try again.");
+      alert("משהו השתבש בהעלאת הקבצים, אנא נסה שנית.");
     } else {
       props.onCancel();
+      props.onFinish();
       props.onChange();
     }
   };

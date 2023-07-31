@@ -1,8 +1,8 @@
 import "./MainFolder.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Card from "../UI/Card";
 import Item from "../item/Item";
-import { Button, Checkbox, Backdrop, Hidden } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 import { getFiles, deleteFile } from "../../requests/googleDrive.ts";
 import UploadFolder from "../userOptions/UploadFolder";
 import UploadFiles from "../userOptions/UploadFiles";
@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ForwardIcon from "@mui/icons-material/Forward";
+import Loading from "../UI/Loading";
 
 const MainFolder = (props) => {
   useEffect(() => {
@@ -20,6 +21,15 @@ const MainFolder = (props) => {
     };
     onStart();
   }, [props.id]);
+
+  /* LOADING */
+  const LoadingRef = useRef(null);
+  const onLoad = () => {
+    LoadingRef.current.onLoad();
+  };
+  const onFinish = () => {
+    LoadingRef.current.onFinish();
+  };
 
   /* ITEMS */
   const [items, setItems] = useState([]);
@@ -127,6 +137,7 @@ const MainFolder = (props) => {
     switch (action) {
       case "delete":
         if (isAllowedAction()) {
+          onLoad();
           for (const el of selectedItems) {
             let deleted = await deleteFile(el.id);
             if (deleted) {
@@ -136,6 +147,7 @@ const MainFolder = (props) => {
               alert("משהו השתבש במחיקת הקבצים, אנא נסה שנית.");
             }
           }
+          onFinish();
         } else {
           alert("ביכולתך למחוק פריטים שבבעלותך בלבד.");
         }
@@ -162,6 +174,7 @@ const MainFolder = (props) => {
 
   /* CHANGE MAIN FOLDER */
   const onChangeFolder = (folderId) => {
+    setSelectedItems([]);
     props.onChangeFolder({
       item: { id: folderId, parentId: props.id },
       action: "add",
@@ -175,6 +188,9 @@ const MainFolder = (props) => {
   return (
     <div className="main-folder">
       <Card className="main-folder-card">
+        {/* LOADING */}
+        <Loading ref={LoadingRef} />
+
         {/* USER OPTIONS */}
         <div className={`main-menu ${props.parentId ? "open" : "close"}`}>
           {/* {props.parentId && ( */}
@@ -188,7 +204,6 @@ const MainFolder = (props) => {
             </div>
             <Card className="back hide">חזרה</Card>
           </div>
-          {/* )} */}
           <Card className="user-options">
             {userOptions.uploadFolder && (
               <UploadFolder
@@ -196,6 +211,8 @@ const MainFolder = (props) => {
                 onCancel={() => {
                   toggleUserOptions("uploadFolder");
                 }}
+                onLoad={onLoad}
+                onFinish={onFinish}
                 onChange={getItems}
               />
             )}
@@ -203,6 +220,8 @@ const MainFolder = (props) => {
               <UploadFiles
                 folderId={props.id}
                 onCancel={() => toggleUserOptions("uploadFiles")}
+                onLoad={onLoad}
+                onFinish={onFinish}
                 onChange={getItems}
               />
             )}
@@ -212,13 +231,21 @@ const MainFolder = (props) => {
                 onCancel={() => {
                   toggleUserOptions("createFolder");
                 }}
+                onLoad={onLoad}
+                onFinish={onFinish}
                 onChange={getItems}
               />
             )}
             <Menu options={options} text="אפשרויות" />
 
             {/* SELECT ITEMS */}
-            <Button onClick={toggleSelectAllItems}>בחר הכל</Button>
+            <Button
+              onClick={() => {
+                toggleSelectAllItems();
+              }}
+            >
+              בחר הכל
+            </Button>
             <Button onClick={toggleSelectAllOwnItems}>
               בחר את כל הפריטים שלי
             </Button>
@@ -305,8 +332,11 @@ const MainFolder = (props) => {
                 size={Math.round(item.size / 1000)}
                 downloadUrl={item.webContentLink}
                 openUrl={item.webViewLink}
+                onLoad={onLoad}
+                onFinish={onFinish}
                 onDelete={getItems}
                 ownedByMe={item.ownedByMe}
+                onSelectItem={toggleSelectItem}
                 onSelectFolder={onChangeFolder}
               />
             </div>
@@ -318,13 +348,3 @@ const MainFolder = (props) => {
 };
 
 export default MainFolder;
-
-/*
-<Button onClick={handleOpen}>Show backdrop</Button>
-<Backdrop
-  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-  open={open}
-  onClick={handleClose}
->
-  <CircularProgress color="inherit" />
-</Backdrop> */

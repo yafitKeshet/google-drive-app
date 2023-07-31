@@ -7,34 +7,44 @@ import FolderIcon from "@mui/icons-material/Folder";
 import Menu from "../menu/Menu";
 import { deleteFile } from "../../requests/googleDrive.ts";
 import "./Item.css";
-/*        
-        items={items}
-        setItems={setItems}
-*/
+
 import Card from "../UI/Card";
 
 const Item = (props) => {
+  /* SELECTED */
+  const [selected, setSelected] = useState(false);
+  const toggleSelected = () => {
+    setSelected((prev) => !prev);
+  };
+
+  /* OPTIONS */
   const onDelete = async () => {
+    props.onLoad();
+
     let deleted = await deleteFile(props.id);
     if (deleted) props.onDelete();
     else {
       alert("משהו השתבש במחיקת הקובץ, אנא נסה שנית.");
     }
+    props.onFinish();
   };
 
   const onOpen = () => {
     window.open(props.openUrl);
   };
+
   const onDownload = () => {
     if (props.downloadUrl) {
       window.open(props.downloadUrl);
     }
   };
+
   const options = [{ data: "צפייה", onClick: onOpen }];
   props.ownedByMe && options.push({ data: "מחק", onClick: onDelete });
   props.type !== "folder" &&
     options.unshift({ data: "הורדה", onClick: onDownload });
 
+  /* ITEM */
   const getIcon = () => {
     switch (props.type) {
       case "folder":
@@ -52,26 +62,28 @@ const Item = (props) => {
   };
 
   const handleItemClicked = (e, id) => {
-    console.log(e.detail);
-
     switch (e.detail) {
+      default:
       case 1:
-        console.log("click");
-        // document.getElementById(id).classList.toggle("selected");
-
+        props.onSelectItem({
+          downloadUrl: props.downloadUrl,
+          openUrl: props.openUrl,
+          id: props.id,
+          ownedByMe: props.ownedByMe,
+        });
+        toggleSelected();
         break;
       case 2:
-      default:
-        console.log("double click");
-        props.onSelectFolder(id);
-      // handleOpenItem(id);
+        if (props.type === "folder") props.onSelectFolder(id);
+        else {
+          window.open(props.openUrl);
+        }
     }
-    // console.log(e.detail);
   };
 
   return (
     <Card
-      className="item"
+      className={`item ${selected && "selected"}`}
       id={props.id}
       onClick={(e) => handleItemClicked(e, props.id)}
     >
@@ -94,6 +106,8 @@ const Item = (props) => {
         <span className="modified-by"> {props.modified_by}</span>
       </div>
       <span className="size">{`${props.size ? props.size + " KB" : "-"}`}</span>
+
+      {/* OPTIONS */}
       <Menu options={options} text="..." />
     </Card>
   );

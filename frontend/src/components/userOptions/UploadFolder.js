@@ -10,26 +10,27 @@ const UploadFolder = (props) => {
   const inputRef = useRef(null);
 
   const onUpload = async () => {
+    props.onLoad();
     let folderName = inputRef.current.files[0].webkitRelativePath
       .split("/")
       .slice(0, -1)
       .slice(-1)[0];
     let folderId = await createFolder(folderName, props.folderId);
     if (folderId === undefined)
-      alert("Something went wrong, please try again.");
+      alert("משהו השתבש בהעלאת התיקיה, אנא נסה שנית.");
     else {
       let response = await uploadFiles(inputRef.current.files, folderId);
       if (response === undefined) {
-        alert("Something went wrong, please try again.");
+        alert("משהו השתבש בהעלאת התיקיה, אנא נסה שנית.");
       } else {
         props.onCancel();
+        props.onFinish();
         props.onChange();
       }
     }
   };
   return (
     <div>
-      {" "}
       <Backdrop onClick={props.onCancel} />
       <Card className="upload-folder-card">
         <header>

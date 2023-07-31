@@ -10,11 +10,14 @@ import Backdrop from "../UI/Backdrop";
 const CreateFolder = (props) => {
   const [folderName, setFolderName] = useState("");
   const onCreate = async () => {
+    props.onLoad();
     let folderId = await createFolder(folderName, props.folderId);
     if (folderId === undefined) {
-      alert("Something went wrong, please try again.");
+      alert("משהו השתבש ביצירת התיקיה, אנא נסה שנית.");
     } else {
       props.onCancel();
+      props.onFinish();
+
       props.onChange();
     }
   };

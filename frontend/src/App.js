@@ -23,6 +23,7 @@ const App = () => {
 
     setOpenFoldersAsync();
   }, []);
+
   const updateMainFolder = (props) => {
     setOpenFolders((prev) => {
       let newOpenFolders = [...prev];
